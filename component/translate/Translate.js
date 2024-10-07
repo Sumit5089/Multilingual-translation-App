@@ -172,10 +172,10 @@ const Translate = () => {
       type: 'audio/m4a',
     });
 
-    formData.append('language', 'Gujarati');
+    formData.append('language', 'Marathi');
   
     try {
-      const response = await axios.post('http://192.168.141.49:5002/transcribe', formData, {
+      const response = await axios.post('http://192.168.1.10:5002/transcribe', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

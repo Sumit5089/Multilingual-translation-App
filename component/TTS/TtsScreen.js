@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { Button, TextInput, View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import {
+  Modal,
+  Button,
+  TextInput,
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
 import axios from 'axios';
 import { Audio } from 'expo-av';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -10,14 +19,15 @@ const App = () => {
   const [audioUri, setAudioUri] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [language, setLanguage] = useState('as'); // Default to Assamese
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleGenerateSpeech = async () => {
     setLoading(true);
     try {
       const response = await axios.post('http://192.168.1.10:5001/tts', {
         text: text,
-        speaker_wav: "C:/Users/SUMIT/OneDrive/Desktop/TTS/newaudio.wav",
-        language: "en",
+        language: language, // Use selected language
       });
 
       if (response.data.status === 'success') {
@@ -29,7 +39,7 @@ const App = () => {
         setError(response.data.message);
       }
     } catch (error) {
-      setError('Error generating speech: ' + error.message);
+      setError('Error generating speech: ' + (error.response ? error.response.data.message : error.message));
     } finally {
       setLoading(false);
     }
@@ -47,6 +57,44 @@ const App = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Text to Speech</Text>
+      
+      {/* Language Selection Button */}
+      <TouchableOpacity style={styles.languageButton} onPress={() => setModalVisible(true)}>
+        <Text style={styles.languageButtonText}>Select Language: {language}</Text>
+      </TouchableOpacity>
+
+      {/* Modal for Language Selection */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Select Language</Text>
+            {['as', 'hi', 'mr', 'ta', 'bn'].map((lang) => (
+              <TouchableOpacity
+                key={lang}
+                style={styles.languageOption}
+                onPress={() => {
+                  setLanguage(lang);
+                  setModalVisible(false);
+                }}
+              >
+                <Text style={styles.languageText}>{lang === 'as' ? 'Assamese' : lang === 'hi' ? 'Hindi' : lang === 'mr' ? 'Marathi' : lang === 'ta' ? 'Tamil' : 'Bengali'}</Text>
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <View style={styles.textInputContainer}>
         <TextInput
           placeholder="Enter text"
@@ -91,6 +139,57 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: wp("7%"),
     marginBottom: hp("3%"),
+  },
+  languageButton: {
+    backgroundColor: '#5beeee',
+    borderRadius: 10,
+    paddingVertical: hp("1.5%"),
+    paddingHorizontal: wp("5%"),
+    alignItems: 'center',
+    marginBottom: hp("2%"),
+  },
+  languageButtonText: {
+    fontSize: wp("5%"),
+    color: '#ffffff',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: wp("5%"),
+    color: '#000000',
+    marginBottom: hp("2%"),
+  },
+  languageOption: {
+    paddingVertical: hp("1%"),
+    width: '100%',
+    alignItems: 'center',
+  },
+  languageText: {
+    fontSize: wp("4%"),
+    color: '#000000',
+  },
+  closeButton: {
+    marginTop: hp("2%"),
+    backgroundColor: '#5beeee',
+    borderRadius: 10,
+    paddingVertical: hp("1.5%"),
+    paddingHorizontal: wp("5%"),
+    alignItems: 'center',
+  },
+  closeButtonText: {
+    fontSize: wp("5%"),
+    color: '#ffffff',
   },
   textInputContainer: {
     flexDirection: 'row',
