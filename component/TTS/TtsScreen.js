@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   Modal,
-  Button,
   TextInput,
   View,
   Text,
@@ -25,13 +24,13 @@ const App = () => {
   const handleGenerateSpeech = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('http://192.168.1.10:5001/tts', {
+      const response = await axios.post('http://192.168.105.49:5001/tts', {
         text: text,
         language: language, // Use selected language
       });
 
       if (response.data.status === 'success') {
-        const audioUrl = `http://192.168.1.10:5001${response.data.audio_url}`;
+        const audioUrl = `http://192.168.105.49:5001${response.data.audio_url}`;
         setAudioUri(audioUrl);
         setError('');
         playAudio(audioUrl);
