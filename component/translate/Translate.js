@@ -8,7 +8,7 @@ import axios from 'axios';
 
 const translateText = async (text, fromLanguage, toLanguage) => {
   try {
-    const response = await axios.post('http://192.168.105.49:5000/translate', {
+    const response = await axios.post('http://192.168.1.10:5000/translate', {
 
       text: text,
       from: fromLanguage,
@@ -23,7 +23,7 @@ const translateText = async (text, fromLanguage, toLanguage) => {
 
 const generateSpeech = async (text, language) => {
   try {
-    const response = await axios.post('http://192.168.105.49:5001/tts', {
+    const response = await axios.post('http://192.168.1.10:5001/tts', {
       text: text,
       language: language,
       speaker_wav: "C:/Users/SUMIT/OneDrive/Desktop/TTS/newaudio.wav"
@@ -32,7 +32,7 @@ const generateSpeech = async (text, language) => {
     });
 
     if (response.data.status === 'success' && response.data.audio_url) {
-      const audioUrl = `http://192.168.105.49:5001${response.data.audio_url}`;
+      const audioUrl = `http://192.168.1.10:5001${response.data.audio_url}`;
       console.log('TTS Audio URL:', audioUrl);
       return audioUrl;
     } else {
@@ -175,7 +175,7 @@ const Translate = () => {
     formData.append('language', 'Marathi');
   
     try {
-      const response = await axios.post('http://192.168.105.49:5002/transcribe', formData, {
+      const response = await axios.post('http://192.168.1.10:5002/transcribe', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

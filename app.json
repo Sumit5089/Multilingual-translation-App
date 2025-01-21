@@ -13,17 +13,22 @@
       "duration": 3000
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "newArchEnabled": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.sumit5089.DocScanner"
+      "package": "com.sumit5089.DocScanner",
+      "newArchEnabled": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "expoGoNewArchEnabled": true
     }
   }
 }

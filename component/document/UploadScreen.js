@@ -147,7 +147,7 @@ const UploadScreen = () => {
   const translateText = async (text) => {
     setTranslationLoading(true);
     try {
-      const response = await axios.post('http://192.168.105.49:5000/translate', {
+      const response = await axios.post('http://192.168.1.10:5000/translate', {
         text: text,
         from: 'en',
         to: selectedLanguage,
