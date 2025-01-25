@@ -172,7 +172,11 @@ const Translate = () => {
       type: 'audio/m4a',
     });
 
-    formData.append('language', 'Marathi');
+   const selectedLanguage = languageOptions.find(option => option.code === selectedLanguage1)?.name || 'Gujarati'; // Fallback to 'Gujarati' if not found
+   console.log('Selected Language:', selectedLanguage);
+   formData.append('language', selectedLanguage);
+    
+
   
     try {
       const response = await axios.post('http://192.168.1.10:5002/transcribe', formData, {
